@@ -73,3 +73,59 @@ model.diagrams // [{ shapes, edges }]
 Wie bei BPMN behält jedes Element seinen XML-Knoten samt Erweiterungen.
 
 Jeder Text aus der Datei wird im SVG und im HTML maskiert.
+
+## Bearbeiten
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { DmnEditor } from '@dskripchenko/bpmn/vue'
+import '@dskripchenko/bpmn/style.css'
+
+const xml = ref<string | null>(null) // null: eine neue Datei mit einer Entscheidung
+</script>
+
+<template>
+  <DmnEditor v-model="xml" style="height: 600px" />
+</template>
+```
+
+`DmnEditor` bearbeitet das Diagramm — die Palette setzt Entscheidungen,
+Eingabedaten, Geschäftswissensmodelle, Wissensquellen und Anmerkungen; das
+Kontextmenü verbindet sie (die Art der Anforderung ergibt sich aus dem
+Verbundenen), öffnet die Logik einer Entscheidung, färbt und löscht; Formen
+lassen sich verschieben und in der Größe ändern; ein Doppelklick bearbeitet
+den Namen — und, einen Klick entfernt, die Logik einer Entscheidung: die
+Trefferrichtlinie, die Spalten (Beschriftung, Ausdruck oder Name, Typ), die
+Regeln und ihre Zellen oder einen literalen Ausdruck mit Ergebnistyp. Zellen
+werden geschrieben, wenn sie den Fokus verlieren. Rückgängig, Tastatur und
+Zeichenfläche funktionieren wie im BPMN-Editor.
+
+Props: `modelValue`, `readonly`, `decision` (die Logik einer Entscheidung
+öffnen), `highlight`, `locale`, `labels`. Ereignisse: `update:modelValue`,
+`change`, `select`, `elementClick`, `open` (die gezeigte Entscheidung oder
+`null`), `error`. `DmnView` ist die schreibgeschützte Variante.
+
+Das Layout bleibt, wo die Datei es führt — DMNDI oder `biodi` in DMN 1.1;
+eine Datei ohne Layout erhält das berechnete bei ihrer ersten Änderung.
+
+Der Kern, `DmnDocument`, arbeitet ohne Vue:
+
+```ts
+import { DmnDocument } from '@dskripchenko/bpmn'
+
+const doc = new DmnDocument(xml)
+const income = doc.createElement('inputData', { x: 200, y: 300 }, { name: 'Einkommen' })
+doc.connect(income, 'Decision_1')
+doc.addRule('Decision_1')
+doc.setCell('Decision_1', 0, { kind: 'input', index: 0 }, '> 1000')
+doc.setHitPolicy('Decision_1', 'COLLECT', 'SUM')
+save(doc.xml)
+```
+
+Diagramm: `createElement`, `connect`, `canConnect`, `move`, `resize`,
+`remove`, `rename`, `setId`, `setColors`. Logik: `setLogic` (`table`,
+`literal`, `none`), `setLiteral`, `setResultType`, `setHitPolicy`, `addRule`,
+`removeRule`, `moveRule`, `setCell`, `addInput`, `addOutput`, `updateInput`,
+`updateOutput`, `removeColumn`. Dazu `undo`, `redo`, `onChange`, `xml`,
+`model`, `diagram`.

@@ -69,3 +69,57 @@ model.diagrams // [{ shapes, edges }]
 Like BPMN models, every element keeps its XML node, extensions included.
 
 Everything text from the file is escaped in both the SVG and the HTML.
+
+## Editing
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { DmnEditor } from '@dskripchenko/bpmn/vue'
+import '@dskripchenko/bpmn/style.css'
+
+const xml = ref<string | null>(null) // null: a new file with one decision
+</script>
+
+<template>
+  <DmnEditor v-model="xml" style="height: 600px" />
+</template>
+```
+
+`DmnEditor` edits the diagram — the palette places decisions, input data,
+business knowledge models, knowledge sources and annotations; the context
+pad connects them (the requirement follows from what is connected), opens a
+decision's logic, colours and deletes; shapes move and resize; a double-click
+edits a name — and, one click away, a decision's logic: the hit policy, the
+columns (label, expression or name, type), the rules and their cells, or a
+literal expression and its result type. Cells are written when they lose
+focus. Undo, keyboard and canvas work as in the BPMN editor.
+
+Props: `modelValue`, `readonly`, `decision` (open a decision's logic),
+`highlight`, `locale`, `labels`. Events: `update:modelValue`, `change`,
+`select`, `elementClick`, `open` (the decision shown, or `null`), `error`.
+`DmnView` is the read-only variant.
+
+The layout stays where the file keeps it — DMNDI, or `biodi` in DMN 1.1; a
+file without one gets the computed layout written on its first change.
+
+The core, `DmnDocument`, works without Vue:
+
+```ts
+import { DmnDocument } from '@dskripchenko/bpmn'
+
+const doc = new DmnDocument(xml)
+const income = doc.createElement('inputData', { x: 200, y: 300 }, { name: 'Income' })
+doc.connect(income, 'Decision_1')
+doc.addRule('Decision_1')
+doc.setCell('Decision_1', 0, { kind: 'input', index: 0 }, '> 1000')
+doc.setHitPolicy('Decision_1', 'COLLECT', 'SUM')
+save(doc.xml)
+```
+
+Diagram: `createElement`, `connect`, `canConnect`, `move`, `resize`,
+`remove`, `rename`, `setId`, `setColors`. Logic: `setLogic` (`table`,
+`literal`, `none`), `setLiteral`, `setResultType`, `setHitPolicy`, `addRule`,
+`removeRule`, `moveRule`, `setCell`, `addInput`, `addOutput`, `updateInput`,
+`updateOutput`, `removeColumn`. Plus `undo`, `redo`, `onChange`, `xml`,
+`model`, `diagram`.

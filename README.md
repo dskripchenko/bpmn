@@ -43,7 +43,7 @@ import '@dskripchenko/bpmn/style.css'
   modelers (`bioc:fill`, `color:background-color`) are honoured.
 - **DMN**: decision requirements diagrams to SVG and decision tables or
   literal expressions to HTML, for DMN 1.1 to 1.5; files without a layout
-  get one.
+  get one. `DmnEditor` edits the diagram and decision tables.
 - **Editor**: a palette, a context pad, moving and resizing with flows
   routed again, labels typed in place, a properties panel, lanes, undo —
   as a Vue component on `@dskripchenko/ui`, or as `BpmnDocument`, a

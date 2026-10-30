@@ -53,3 +53,41 @@ model.diagrams // [{ shapes, edges }]
 与 BPMN 一样，每个元素都保留其 XML 节点及扩展。
 
 文件中的所有文本在 SVG 和 HTML 中都会被转义。
+
+## 编辑
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { DmnEditor } from '@dskripchenko/bpmn/vue'
+import '@dskripchenko/bpmn/style.css'
+
+const xml = ref<string | null>(null) // null：只有一个决策的新文件
+</script>
+
+<template>
+  <DmnEditor v-model="xml" style="height: 600px" />
+</template>
+```
+
+`DmnEditor` 可编辑图：调色板放置决策、输入数据、业务知识模型、知识源和注释；上下文面板用于连接它们（需求类型由所连接的元素决定）、打开决策的逻辑、着色和删除；形状可移动和调整大小；双击编辑名称。只需一次点击即可编辑决策的逻辑：命中策略、列（标签、表达式或名称、类型）、规则及其单元格，或字面表达式及其结果类型。单元格在失去焦点时写入。撤销、键盘和画布操作与 BPMN 编辑器相同。
+
+属性：`modelValue`、`readonly`、`decision`（打开某个决策的逻辑）、`highlight`、`locale`、`labels`。事件：`update:modelValue`、`change`、`select`、`elementClick`、`open`（当前显示的决策或 `null`）、`error`。`DmnView` 是只读版本。
+
+布局保存在文件原有的位置——DMNDI，或 DMN 1.1 中的 `biodi`；没有布局的文件会在第一次修改时写入计算出的布局。
+
+核心 `DmnDocument` 无需 Vue 即可使用：
+
+```ts
+import { DmnDocument } from '@dskripchenko/bpmn'
+
+const doc = new DmnDocument(xml)
+const income = doc.createElement('inputData', { x: 200, y: 300 }, { name: '收入' })
+doc.connect(income, 'Decision_1')
+doc.addRule('Decision_1')
+doc.setCell('Decision_1', 0, { kind: 'input', index: 0 }, '> 1000')
+doc.setHitPolicy('Decision_1', 'COLLECT', 'SUM')
+save(doc.xml)
+```
+
+图：`createElement`、`connect`、`canConnect`、`move`、`resize`、`remove`、`rename`、`setId`、`setColors`。逻辑：`setLogic`（`table`、`literal`、`none`）、`setLiteral`、`setResultType`、`setHitPolicy`、`addRule`、`removeRule`、`moveRule`、`setCell`、`addInput`、`addOutput`、`updateInput`、`updateOutput`、`removeColumn`。另有 `undo`、`redo`、`onChange`、`xml`、`model`、`diagram`。
