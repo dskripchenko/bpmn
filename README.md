@@ -1,6 +1,6 @@
 # @dskripchenko/bpmn
 
-BPMN 2.0 diagrams — a viewer that draws files to SVG with **no runtime
+BPMN 2.0 and DMN — a viewer that draws files to SVG with **no runtime
 dependencies and no DOM**, an editing core with undo, and a Vue editor.
 Reads and writes the XML that Camunda Modeler, bpmn.io and other BPMN tools
 save, without losing their extensions.
@@ -41,6 +41,9 @@ import '@dskripchenko/bpmn/style.css'
   extensions.
 - **Themeable**: every colour is a CSS custom property; colours stored by
   modelers (`bioc:fill`, `color:background-color`) are honoured.
+- **DMN**: decision requirements diagrams to SVG and decision tables or
+  literal expressions to HTML, for DMN 1.1 to 1.5; files without a layout
+  get one.
 - **Editor**: a palette, a context pad, moving and resizing with flows
   routed again, labels typed in place, a properties panel, lanes, undo —
   as a Vue component on `@dskripchenko/ui`, or as `BpmnDocument`, a
@@ -49,10 +52,10 @@ import '@dskripchenko/bpmn/style.css'
 
 ## Documentation
 
-- [Getting started](docs/en/getting-started.md) · [Editor](docs/en/editor.md) · [Theming](docs/en/theming.md)
-- Русский: [начало работы](docs/ru/getting-started.md) · [редактор](docs/ru/editor.md) · [оформление](docs/ru/theming.md)
-- Deutsch: [Erste Schritte](docs/de/getting-started.md) · [Editor](docs/de/editor.md) · [Gestaltung](docs/de/theming.md)
-- 中文：[快速开始](docs/zh/getting-started.md) · [编辑器](docs/zh/editor.md) · [主题](docs/zh/theming.md)
+- [Getting started](docs/en/getting-started.md) · [Editor](docs/en/editor.md) · [DMN](docs/en/dmn.md) · [Theming](docs/en/theming.md)
+- Русский: [начало работы](docs/ru/getting-started.md) · [редактор](docs/ru/editor.md) · [DMN](docs/ru/dmn.md) · [оформление](docs/ru/theming.md)
+- Deutsch: [Erste Schritte](docs/de/getting-started.md) · [Editor](docs/de/editor.md) · [DMN](docs/de/dmn.md) · [Gestaltung](docs/de/theming.md)
+- 中文：[快速开始](docs/zh/getting-started.md) · [编辑器](docs/zh/editor.md) · [DMN](docs/zh/dmn.md) · [主题](docs/zh/theming.md)
 
 ## License
 

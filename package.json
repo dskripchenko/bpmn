@@ -1,7 +1,7 @@
 {
   "name": "@dskripchenko/bpmn",
   "version": "0.2.0",
-  "description": "BPMN 2.0 diagrams: a zero-dependency viewer that draws files to SVG without a DOM, an editing core with undo, and a Vue editor — reads and writes the XML of Camunda Modeler, bpmn.io and other BPMN tools without losing their extensions",
+  "description": "BPMN 2.0 and DMN: a zero-dependency viewer that draws files to SVG (and DMN decision tables to HTML) without a DOM, an editing core with undo, and a Vue editor — reads and writes the XML of Camunda Modeler, bpmn.io and other tools without losing their extensions",
   "keywords": [
     "bpmn",
     "bpmn2",
@@ -15,7 +15,10 @@
     "ssr",
     "bpmn-editor",
     "bpmn-modeler",
-    "vue"
+    "vue",
+    "dmn",
+    "decision-table",
+    "drd"
   ],
   "homepage": "https://github.com/dskripchenko/bpmn#readme",
   "repository": {

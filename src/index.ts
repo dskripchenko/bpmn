@@ -40,3 +40,29 @@ export type { ShapeType, FlowType, EventDefinitionKind } from './edit/rules'
 export { hitTest, elementsIn, borderOf, distanceToPath, isFrame, isResizable, BAND } from './edit/hit'
 export { clampZoom, toScreen, toWorld, zoomAt, fitView, centreOn, DEFAULT_LIMITS } from './viewport'
 export type { Viewport, ZoomLimits } from './viewport'
+export { parseDmn, dmnFromDocument, associationEnds, hrefId, isDmnModelNs, DRG_TYPES } from './dmn/model'
+export type {
+  DmnModel,
+  DmnElement,
+  DmnDecision,
+  DmnRequirement,
+  DmnDiagram,
+  DmnShape,
+  DmnEdge,
+  DecisionLogic,
+  DecisionTable,
+  LiteralExpression,
+  OtherExpression,
+  TableInput,
+  TableOutput,
+  TableRule,
+  HitPolicy,
+  RequirementKind,
+  DrgType,
+  DmnParseOptions,
+} from './dmn/model'
+export { renderDmn, dmnDiagram } from './dmn/render'
+export type { DmnRenderOptions, DmnRenderResult } from './dmn/render'
+export { renderDecision, hitPolicyCode } from './dmn/table'
+export type { DecisionRenderOptions, DecisionRenderResult } from './dmn/table'
+export { autoLayout, dmnSize } from './dmn/layout'

@@ -7,7 +7,8 @@ that a file can never become active content in the viewer's page.
 ## What is guaranteed
 
 - **No markup from text.** Every name, annotation and attribute value is
-  escaped by the one SVG builder that produces the output.
+  escaped by the one SVG builder that produces the output; the HTML of DMN
+  decision tables escapes every cell the same way.
 - **No external content.** A document type declaration is refused, so there
   are no external entities and no entity expansion. Only the five predefined
   entities and character references are decoded. Nothing in the file is
@@ -18,7 +19,8 @@ that a file can never become active content in the viewer's page.
 - **Bounded work.** Files are limited to 20 million characters, 200 000
   elements and 256 levels of nesting (adjustable downwards with `limits`).
 
-The SVG returned by `render` is therefore safe to insert with `innerHTML`
+The SVG returned by `render` and `renderDmn` and the HTML returned by
+`renderDecision` are therefore safe to insert with `innerHTML`
 without a sanitiser.
 
 ## Supported versions
