@@ -13,18 +13,19 @@ const out = join(root, 'tests/browser/output')
 mkdirSync(out, { recursive: true })
 const filter = process.argv[2] ?? ''
 const fixtures = readdirSync(join(root, 'tests/fixtures'))
-  .filter((f) => f.endsWith('.bpmn') && f.includes(filter))
-  .map((f) => ({ name: f.replace(/\.bpmn$/, ''), source: readFileSync(join(root, 'tests/fixtures', f), 'utf8') }))
+  .filter((f) => /\.(bpmn|dmn)$/.test(f) && f.includes(filter))
+  .map((f) => ({ name: f.replace(/\.(bpmn|dmn)$/, ''), dmn: f.endsWith('.dmn'), source: readFileSync(join(root, 'tests/fixtures', f), 'utf8') }))
 
 const DARK = `.dark { background: #111827; color-scheme: dark;
   --bpmn-stroke: #d1d5db; --bpmn-fill: #1f2937; --bpmn-text: #e5e7eb; --bpmn-pool-fill: #111827;
-  --bpmn-group-stroke: #9ca3af; --bpmn-annotation-stroke: #9ca3af; --bpmn-label-halo: #111827; }`
+  --bpmn-group-stroke: #9ca3af; --bpmn-annotation-stroke: #9ca3af; --bpmn-label-halo: #111827;
+  --dmn-text: #e5e7eb; --dmn-muted: #9ca3af; --dmn-border: #374151; --dmn-head: #1f2937; --dmn-background: #111827; }`
 
 const html = `<!doctype html><meta charset="utf-8">
 <style>body{margin:0;font-family:system-ui} .case{padding:16px;display:inline-block} ${DARK}</style>
 <body><div id="root"></div>
 <script type="module">
-  import { render } from '/index.mjs'
+  import { render, renderDmn, renderDecision, parseDmn } from '/index.mjs'
   const fixtures = ${JSON.stringify(fixtures)}
   const root = document.getElementById('root')
   const results = []
@@ -34,7 +35,13 @@ const html = `<!doctype html><meta charset="utf-8">
       box.className = 'case ' + theme
       box.id = f.name + '--' + theme
       try {
-        box.innerHTML = render(f.source, { idPrefix: 'b-' + f.name + '-' + theme }).svg
+        if (f.dmn) {
+          const model = parseDmn(f.source)
+          box.innerHTML = renderDmn(model, { idPrefix: 'b-' + f.name + '-' + theme }).svg +
+            model.decisions.map((d) => '<div style="margin-top:16px">' + renderDecision(model, d.id, { idPrefix: 'b-' + theme }).html + '</div>').join('')
+        } else {
+          box.innerHTML = render(f.source, { idPrefix: 'b-' + f.name + '-' + theme }).svg
+        }
       } catch (e) {
         results.push({ name: f.name, error: String(e) })
       }
@@ -46,9 +53,9 @@ const html = `<!doctype html><meta charset="utf-8">
     const svg = document.querySelector('#' + CSS.escape(f.name + '--light') + ' svg')
     if (!svg) continue
     const problems = []
-    const activities = ['task', 'userTask', 'serviceTask', 'scriptTask', 'sendTask', 'receiveTask', 'manualTask', 'businessRuleTask', 'callActivity', 'subProcess', 'transaction', 'adHocSubProcess']
-    for (const group of svg.querySelectorAll(activities.map((t) => '.bpmn-type-' + t).join(','))) {
-      const shape = group.querySelector('rect')
+    const activities = ['decision', 'inputData', 'businessKnowledgeModel', 'knowledgeSource', 'task', 'userTask', 'serviceTask', 'scriptTask', 'sendTask', 'receiveTask', 'manualTask', 'businessRuleTask', 'callActivity', 'subProcess', 'transaction', 'adHocSubProcess']
+    for (const group of svg.querySelectorAll(activities.flatMap((t) => ['.bpmn-type-' + t, '.dmn-type-' + t]).join(','))) {
+      const shape = group.querySelector('rect, path')
       const text = group.querySelector('text')
       if (!shape || !text || !text.textContent.trim()) continue
       const s = shape.getBBox()

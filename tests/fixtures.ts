@@ -1,4 +1,4 @@
-const files = import.meta.glob('./fixtures/*.bpmn', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
+const files = import.meta.glob('./fixtures/*.{bpmn,dmn}', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
 
 /** A file of tests/fixtures by name. */
 export function fixture(name: string): string {
