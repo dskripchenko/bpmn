@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_Gallery" targetNamespace="http://example.com/gallery">
+  <bpmn:process id="Process_Gallery" name="Symbol gallery" isExecutable="false">
+    <bpmn:ioSpecification id="IoSpec"><bpmn:dataInput id="IO_58" name="dataInput" /><bpmn:dataOutput id="IO_59" name="dataOutput" /><bpmn:inputSet /><bpmn:outputSet /></bpmn:ioSpecification>
+    <bpmn:startEvent id="Event_1" name="start none"></bpmn:startEvent>
+    <bpmn:startEvent id="Event_2" name="start message"><bpmn:messageEventDefinition id="Event_2_def" /></bpmn:startEvent>
+    <bpmn:startEvent id="Event_3" name="start timer"><bpmn:timerEventDefinition id="Event_3_def" /></bpmn:startEvent>
+    <bpmn:startEvent id="Event_4" name="start conditional"><bpmn:conditionalEventDefinition id="Event_4_def" /></bpmn:startEvent>
+    <bpmn:startEvent id="Event_5" name="start signal"><bpmn:signalEventDefinition id="Event_5_def" /></bpmn:startEvent>
+    <bpmn:startEvent id="Event_6" name="start escalation"><bpmn:escalationEventDefinition id="Event_6_def" /></bpmn:startEvent>
+    <bpmn:startEvent id="Event_7" name="start error"><bpmn:errorEventDefinition id="Event_7_def" /></bpmn:startEvent>
+    <bpmn:startEvent id="Event_8" name="start compensate"><bpmn:compensateEventDefinition id="Event_8_def" /></bpmn:startEvent>
+    <bpmn:intermediateCatchEvent id="Event_9" name="intermediateCatch none"></bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="Event_10" name="intermediateCatch message"><bpmn:messageEventDefinition id="Event_10_def" /></bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="Event_11" name="intermediateCatch timer"><bpmn:timerEventDefinition id="Event_11_def" /></bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="Event_12" name="intermediateCatch conditional"><bpmn:conditionalEventDefinition id="Event_12_def" /></bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="Event_13" name="intermediateCatch link"><bpmn:linkEventDefinition id="Event_13_def" /></bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="Event_14" name="intermediateCatch signal"><bpmn:signalEventDefinition id="Event_14_def" /></bpmn:intermediateCatchEvent>
+    <bpmn:intermediateThrowEvent id="Event_15" name="intermediateThrow none"></bpmn:intermediateThrowEvent>
+    <bpmn:intermediateThrowEvent id="Event_16" name="intermediateThrow message"><bpmn:messageEventDefinition id="Event_16_def" /></bpmn:intermediateThrowEvent>
+    <bpmn:intermediateThrowEvent id="Event_17" name="intermediateThrow escalation"><bpmn:escalationEventDefinition id="Event_17_def" /></bpmn:intermediateThrowEvent>
+    <bpmn:intermediateThrowEvent id="Event_18" name="intermediateThrow link"><bpmn:linkEventDefinition id="Event_18_def" /></bpmn:intermediateThrowEvent>
+    <bpmn:intermediateThrowEvent id="Event_19" name="intermediateThrow compensate"><bpmn:compensateEventDefinition id="Event_19_def" /></bpmn:intermediateThrowEvent>
+    <bpmn:intermediateThrowEvent id="Event_20" name="intermediateThrow signal"><bpmn:signalEventDefinition id="Event_20_def" /></bpmn:intermediateThrowEvent>
+    <bpmn:endEvent id="Event_21" name="end none"></bpmn:endEvent>
+    <bpmn:endEvent id="Event_22" name="end message"><bpmn:messageEventDefinition id="Event_22_def" /></bpmn:endEvent>
+    <bpmn:endEvent id="Event_23" name="end escalation"><bpmn:escalationEventDefinition id="Event_23_def" /></bpmn:endEvent>
+    <bpmn:endEvent id="Event_24" name="end error"><bpmn:errorEventDefinition id="Event_24_def" /></bpmn:endEvent>
+    <bpmn:endEvent id="Event_25" name="end cancel"><bpmn:cancelEventDefinition id="Event_25_def" /></bpmn:endEvent>
+    <bpmn:endEvent id="Event_26" name="end compensate"><bpmn:compensateEventDefinition id="Event_26_def" /></bpmn:endEvent>
+    <bpmn:endEvent id="Event_27" name="end signal"><bpmn:signalEventDefinition id="Event_27_def" /></bpmn:endEvent>
+    <bpmn:endEvent id="Event_28" name="end terminate"><bpmn:terminateEventDefinition id="Event_28_def" /></bpmn:endEvent>
+    <bpmn:intermediateCatchEvent id="Event_29" name="multiple"><bpmn:messageEventDefinition /><bpmn:signalEventDefinition /></bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="Event_30" name="parallel multiple" parallelMultiple="true"><bpmn:messageEventDefinition /><bpmn:signalEventDefinition /></bpmn:intermediateCatchEvent>
+    <bpmn:task id="Task_31" name="task" />
+    <bpmn:userTask id="Task_32" name="userTask" />
+    <bpmn:serviceTask id="Task_33" name="serviceTask" />
+    <bpmn:scriptTask id="Task_34" name="scriptTask" />
+    <bpmn:sendTask id="Task_35" name="sendTask" />
+    <bpmn:receiveTask id="Task_36" name="receiveTask" />
+    <bpmn:manualTask id="Task_37" name="manualTask" />
+    <bpmn:businessRuleTask id="Task_38" name="businessRuleTask" />
+    <bpmn:callActivity id="Task_39" name="callActivity" />
+    <bpmn:task id="Act_40" name="loop"><bpmn:standardLoopCharacteristics /></bpmn:task>
+    <bpmn:task id="Act_41" name="parallel MI"><bpmn:multiInstanceLoopCharacteristics /></bpmn:task>
+    <bpmn:task id="Act_42" name="sequential MI"><bpmn:multiInstanceLoopCharacteristics isSequential="true" /></bpmn:task>
+    <bpmn:task id="Act_43" name="compensation" isForCompensation="true"></bpmn:task>
+    <bpmn:subProcess id="Act_44" name="collapsed sub-process"></bpmn:subProcess>
+    <bpmn:adHocSubProcess id="Act_45" name="ad hoc"></bpmn:adHocSubProcess>
+    <bpmn:subProcess id="Act_46" name="MI collapsed"><bpmn:multiInstanceLoopCharacteristics /></bpmn:subProcess>
+    <bpmn:exclusiveGateway id="Gateway_47" name="exclusive" />
+    <bpmn:exclusiveGateway id="Gateway_48" name="exclusive" />
+    <bpmn:parallelGateway id="Gateway_49" name="parallel" />
+    <bpmn:inclusiveGateway id="Gateway_50" name="inclusive" />
+    <bpmn:complexGateway id="Gateway_51" name="complex" />
+    <bpmn:eventBasedGateway id="Gateway_52" name="eventBased" />
+    <bpmn:eventBasedGateway id="Gateway_53" name="eventBased" instantiate="true" />
+    <bpmn:eventBasedGateway id="Gateway_54" name="eventBased" instantiate="true" eventGatewayType="Parallel" />
+    <bpmn:dataObject id="DO_1" isCollection="true" />
+    <bpmn:dataObjectReference id="Data_55" name="dataObject" />
+    <bpmn:dataObjectReference id="Data_56" name="dataObject" dataObjectRef="DO_1" />
+    <bpmn:dataStoreReference id="Data_57" name="dataStore" />
+    <bpmn:transaction id="Tx_1" name="transaction" />
+    <bpmn:subProcess id="EvSub_1" name="event sub-process" triggeredByEvent="true" />
+    <bpmn:task id="Host_1" name="boundary events" />
+    <bpmn:boundaryEvent id="Boundary_60" attachedToRef="Host_1"><bpmn:errorEventDefinition /></bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Boundary_61" attachedToRef="Host_1" cancelActivity="false"><bpmn:timerEventDefinition /></bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Boundary_62" attachedToRef="Host_1" cancelActivity="false"><bpmn:messageEventDefinition /></bpmn:boundaryEvent>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_Gallery">
+    <bpmndi:BPMNPlane id="Plane_Gallery" bpmnElement="Process_Gallery">
+      <bpmndi:BPMNShape id="Event_1_di" bpmnElement="Event_1"><dc:Bounds x="40" y="40" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="13" y="81" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_2_di" bpmnElement="Event_2"><dc:Bounds x="150" y="40" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="123" y="81" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_3_di" bpmnElement="Event_3"><dc:Bounds x="260" y="40" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="233" y="81" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_4_di" bpmnElement="Event_4"><dc:Bounds x="370" y="40" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="343" y="81" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_5_di" bpmnElement="Event_5"><dc:Bounds x="480" y="40" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="453" y="81" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_6_di" bpmnElement="Event_6"><dc:Bounds x="590" y="40" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="563" y="81" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_7_di" bpmnElement="Event_7"><dc:Bounds x="700" y="40" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="673" y="81" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_8_di" bpmnElement="Event_8"><dc:Bounds x="810" y="40" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="783" y="81" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_9_di" bpmnElement="Event_9"><dc:Bounds x="40" y="130" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="13" y="171" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_10_di" bpmnElement="Event_10"><dc:Bounds x="150" y="130" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="123" y="171" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_11_di" bpmnElement="Event_11"><dc:Bounds x="260" y="130" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="233" y="171" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_12_di" bpmnElement="Event_12"><dc:Bounds x="370" y="130" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="343" y="171" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_13_di" bpmnElement="Event_13"><dc:Bounds x="480" y="130" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="453" y="171" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_14_di" bpmnElement="Event_14"><dc:Bounds x="590" y="130" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="563" y="171" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_15_di" bpmnElement="Event_15"><dc:Bounds x="40" y="220" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="13" y="261" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_16_di" bpmnElement="Event_16"><dc:Bounds x="150" y="220" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="123" y="261" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_17_di" bpmnElement="Event_17"><dc:Bounds x="260" y="220" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="233" y="261" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_18_di" bpmnElement="Event_18"><dc:Bounds x="370" y="220" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="343" y="261" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_19_di" bpmnElement="Event_19"><dc:Bounds x="480" y="220" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="453" y="261" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_20_di" bpmnElement="Event_20"><dc:Bounds x="590" y="220" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="563" y="261" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_21_di" bpmnElement="Event_21"><dc:Bounds x="40" y="310" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="13" y="351" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_22_di" bpmnElement="Event_22"><dc:Bounds x="150" y="310" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="123" y="351" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_23_di" bpmnElement="Event_23"><dc:Bounds x="260" y="310" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="233" y="351" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_24_di" bpmnElement="Event_24"><dc:Bounds x="370" y="310" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="343" y="351" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_25_di" bpmnElement="Event_25"><dc:Bounds x="480" y="310" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="453" y="351" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_26_di" bpmnElement="Event_26"><dc:Bounds x="590" y="310" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="563" y="351" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_27_di" bpmnElement="Event_27"><dc:Bounds x="700" y="310" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="673" y="351" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_28_di" bpmnElement="Event_28"><dc:Bounds x="810" y="310" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="783" y="351" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_29_di" bpmnElement="Event_29"><dc:Bounds x="40" y="400" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="13" y="441" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_30_di" bpmnElement="Event_30"><dc:Bounds x="150" y="400" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="123" y="441" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_31_di" bpmnElement="Task_31"><dc:Bounds x="40" y="490" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_32_di" bpmnElement="Task_32"><dc:Bounds x="160" y="490" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_33_di" bpmnElement="Task_33"><dc:Bounds x="280" y="490" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_34_di" bpmnElement="Task_34"><dc:Bounds x="400" y="490" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_35_di" bpmnElement="Task_35"><dc:Bounds x="520" y="490" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_36_di" bpmnElement="Task_36"><dc:Bounds x="640" y="490" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_37_di" bpmnElement="Task_37"><dc:Bounds x="760" y="490" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_38_di" bpmnElement="Task_38"><dc:Bounds x="880" y="490" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_39_di" bpmnElement="Task_39"><dc:Bounds x="1000" y="490" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Act_40_di" bpmnElement="Act_40"><dc:Bounds x="40" y="600" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Act_41_di" bpmnElement="Act_41"><dc:Bounds x="160" y="600" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Act_42_di" bpmnElement="Act_42"><dc:Bounds x="280" y="600" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Act_43_di" bpmnElement="Act_43"><dc:Bounds x="400" y="600" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Act_44_di" bpmnElement="Act_44"><dc:Bounds x="520" y="600" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Act_45_di" bpmnElement="Act_45"><dc:Bounds x="640" y="600" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Act_46_di" bpmnElement="Act_46"><dc:Bounds x="760" y="600" width="100" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_47_di" bpmnElement="Gateway_47" isMarkerVisible="true"><dc:Bounds x="40" y="710" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="20" y="765" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_48_di" bpmnElement="Gateway_48"><dc:Bounds x="150" y="710" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="130" y="765" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_49_di" bpmnElement="Gateway_49"><dc:Bounds x="260" y="710" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="240" y="765" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_50_di" bpmnElement="Gateway_50"><dc:Bounds x="370" y="710" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="350" y="765" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_51_di" bpmnElement="Gateway_51"><dc:Bounds x="480" y="710" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="460" y="765" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_52_di" bpmnElement="Gateway_52"><dc:Bounds x="590" y="710" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="570" y="765" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_53_di" bpmnElement="Gateway_53"><dc:Bounds x="700" y="710" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="680" y="765" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_54_di" bpmnElement="Gateway_54"><dc:Bounds x="810" y="710" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="790" y="765" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Data_55_di" bpmnElement="Data_55"><dc:Bounds x="40" y="810" width="36" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="13" y="865" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Data_56_di" bpmnElement="Data_56"><dc:Bounds x="150" y="810" width="36" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="123" y="865" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Data_57_di" bpmnElement="Data_57"><dc:Bounds x="260" y="810" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="240" y="865" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="IO_58_di" bpmnElement="IO_58"><dc:Bounds x="370" y="810" width="36" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="343" y="865" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="IO_59_di" bpmnElement="IO_59"><dc:Bounds x="480" y="810" width="36" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="453" y="865" width="90" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Tx_1_di" bpmnElement="Tx_1" isExpanded="true"><dc:Bounds x="40" y="920" width="220" height="120" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EvSub_1_di" bpmnElement="EvSub_1" isExpanded="true"><dc:Bounds x="300" y="920" width="220" height="120" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Host_1_di" bpmnElement="Host_1"><dc:Bounds x="580" y="940" width="140" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Boundary_60_di" bpmnElement="Boundary_60"><dc:Bounds x="590" y="1002" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Boundary_61_di" bpmnElement="Boundary_61"><dc:Bounds x="635" y="1002" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Boundary_62_di" bpmnElement="Boundary_62"><dc:Bounds x="680" y="1002" width="36" height="36" /></bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
