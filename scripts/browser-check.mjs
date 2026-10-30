@@ -1,0 +1,114 @@
+// Renders every fixture in a real browser — with the canvas measurer, as a
+// page would — and checks what a test in Node cannot: the name of every task
+// and sub-process fits inside its box, and the page logs no errors.
+// Screenshots land in tests/browser/output, in the light and the dark theme.
+//
+//   pnpm build && node scripts/browser-check.mjs [filter]
+import { readFileSync, readdirSync, mkdirSync } from 'node:fs'
+import { join } from 'node:path'
+import { chromium } from 'playwright'
+
+const root = new URL('..', import.meta.url).pathname
+const out = join(root, 'tests/browser/output')
+mkdirSync(out, { recursive: true })
+const filter = process.argv[2] ?? ''
+const fixtures = readdirSync(join(root, 'tests/fixtures'))
+  .filter((f) => f.endsWith('.bpmn') && f.includes(filter))
+  .map((f) => ({ name: f.replace(/\.bpmn$/, ''), source: readFileSync(join(root, 'tests/fixtures', f), 'utf8') }))
+
+const DARK = `.dark { background: #111827; color-scheme: dark;
+  --bpmn-stroke: #d1d5db; --bpmn-fill: #1f2937; --bpmn-text: #e5e7eb; --bpmn-pool-fill: #111827;
+  --bpmn-group-stroke: #9ca3af; --bpmn-annotation-stroke: #9ca3af; --bpmn-label-halo: #111827; }`
+
+const html = `<!doctype html><meta charset="utf-8">
+<style>body{margin:0;font-family:system-ui} .case{padding:16px;display:inline-block} ${DARK}</style>
+<body><div id="root"></div>
+<script type="module">
+  import { render } from '/index.mjs'
+  const fixtures = ${JSON.stringify(fixtures)}
+  const root = document.getElementById('root')
+  const results = []
+  for (const f of fixtures) {
+    for (const theme of ['light', 'dark']) {
+      const box = document.createElement('div')
+      box.className = 'case ' + theme
+      box.id = f.name + '--' + theme
+      try {
+        box.innerHTML = render(f.source, { idPrefix: 'b-' + f.name + '-' + theme }).svg
+      } catch (e) {
+        results.push({ name: f.name, error: String(e) })
+      }
+      root.appendChild(box)
+    }
+  }
+  await document.fonts.ready
+  for (const f of fixtures) {
+    const svg = document.querySelector('#' + CSS.escape(f.name + '--light') + ' svg')
+    if (!svg) continue
+    const problems = []
+    const activities = ['task', 'userTask', 'serviceTask', 'scriptTask', 'sendTask', 'receiveTask', 'manualTask', 'businessRuleTask', 'callActivity', 'subProcess', 'transaction', 'adHocSubProcess']
+    for (const group of svg.querySelectorAll(activities.map((t) => '.bpmn-type-' + t).join(','))) {
+      const shape = group.querySelector('rect')
+      const text = group.querySelector('text')
+      if (!shape || !text || !text.textContent.trim()) continue
+      const s = shape.getBBox()
+      const t = text.getBBox()
+      if (t.x < s.x - 1 || t.y < s.y - 1 || t.x + t.width > s.x + s.width + 1 || t.y + t.height > s.y + s.height + 1) {
+        problems.push({ id: group.getAttribute('data-element-id'), text: text.textContent, shape: [s.x, s.y, s.width, s.height].map(Math.round), label: [t.x, t.y, t.width, t.height].map(Math.round) })
+      }
+    }
+    // Every drawn label inside the drawing.
+    const view = svg.viewBox.baseVal
+    const toSvg = svg.getScreenCTM().inverse()
+    for (const text of svg.querySelectorAll('text')) {
+      // The box in the drawing's coordinates, rotation of pool names included.
+      const b = text.getBBox()
+      const m = toSvg.multiply(text.getScreenCTM())
+      const corners = [[b.x, b.y], [b.x + b.width, b.y], [b.x, b.y + b.height], [b.x + b.width, b.y + b.height]].map(([x, y]) => new DOMPoint(x, y).matrixTransform(m))
+      const xs = corners.map((p) => p.x)
+      const ys = corners.map((p) => p.y)
+      const t = { x: Math.min(...xs), y: Math.min(...ys), width: Math.max(...xs) - Math.min(...xs), height: Math.max(...ys) - Math.min(...ys) }
+      if (t.x < view.x - 1 || t.y < view.y - 1 || t.x + t.width > view.x + view.width + 1 || t.y + t.height > view.y + view.height + 1) {
+        problems.push({ clipped: text.textContent })
+      }
+    }
+    results.push({ name: f.name, problems })
+  }
+  window.__results = results
+</script>`
+
+const browser = await chromium.launch()
+const page = await browser.newPage({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 2 })
+await page.route('http://check.local/**', (route) => {
+  const url = new URL(route.request().url())
+  if (url.pathname === '/') return route.fulfill({ contentType: 'text/html', body: html })
+  if (url.pathname === '/index.mjs') return route.fulfill({ contentType: 'text/javascript', body: readFileSync(join(root, 'dist/index.mjs')) })
+  return route.fulfill({ status: 404 })
+})
+const errors = []
+page.on('pageerror', (e) => errors.push(String(e)))
+await page.goto('http://check.local/')
+await page.waitForFunction(() => window.__results, null, { timeout: 30000 })
+const results = await page.evaluate(() => window.__results)
+for (const f of fixtures) {
+  for (const theme of ['light', 'dark']) {
+    const el = await page.$('#' + f.name + '--' + theme)
+    if (el) await el.screenshot({ path: join(out, `${f.name}--${theme}.png`) })
+  }
+}
+await browser.close()
+
+let failed = errors.length > 0
+for (const e of errors) console.error('page error:', e)
+for (const r of results) {
+  if (r.error) {
+    failed = true
+    console.error(`✗ ${r.name}: ${r.error}`)
+  } else if (r.problems.length > 0) {
+    failed = true
+    console.error(`✗ ${r.name}:`, JSON.stringify(r.problems))
+  } else {
+    console.log(`✓ ${r.name}`)
+  }
+}
+process.exit(failed ? 1 : 0)
