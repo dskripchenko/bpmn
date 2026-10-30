@@ -82,3 +82,7 @@ render(xml, { measureText: approximateMeasurer })
 各类事件及其所有定义、各类任务、调用活动、子流程（折叠、展开、事件子流程、事务、自由子流程）、循环/多实例/补偿标记、网关、数据对象与数据存储、文本注释、组、池与泳道、所有类型的流以及会话。编排（choreography）以带名称的普通方框绘制。
 
 每个元素都是 `<g class="bpmn-element bpmn-type-userTask" data-element-id="Task_Check">`，页面可以查找、高亮它或绑定事件处理程序。
+
+## 编辑
+
+如需修改图，请参阅[编辑器](editor.md)：一个 Vue 组件和一个不依赖框架的编辑核心。

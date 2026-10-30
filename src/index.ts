@@ -37,3 +37,6 @@ export {
   isFlow,
 } from './edit/rules'
 export type { ShapeType, FlowType, EventDefinitionKind } from './edit/rules'
+export { hitTest, elementsIn, borderOf, distanceToPath, isFrame, isResizable, BAND } from './edit/hit'
+export { clampZoom, toScreen, toWorld, zoomAt, fitView, centreOn, DEFAULT_LIMITS } from './viewport'
+export type { Viewport, ZoomLimits } from './viewport'

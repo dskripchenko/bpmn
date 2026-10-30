@@ -97,3 +97,7 @@ Konversationen. Choreografien werden als einfache Kästen mit Namen gezeichnet.
 
 Jedes Element ist ein `<g class="bpmn-element bpmn-type-userTask" data-element-id="Task_Check">`,
 damit eine Seite es finden, hervorheben oder mit einem Handler versehen kann.
+
+## Bearbeiten
+
+Zum Ändern von Diagrammen siehe den [Editor](editor.md): eine Vue-Komponente und einen Bearbeitungskern ohne Framework.

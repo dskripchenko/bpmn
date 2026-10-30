@@ -95,3 +95,7 @@ render(xml, { measureText: approximateMeasurer })
 
 Каждый элемент — это `<g class="bpmn-element bpmn-type-userTask" data-element-id="Task_Check">`,
 поэтому страница может найти его, подсветить или повесить обработчик.
+
+## Редактирование
+
+Чтобы менять диаграммы, см. [редактор](editor.md): компонент Vue и ядро редактирования без фреймворка.
