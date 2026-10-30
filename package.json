@@ -1,6 +1,6 @@
 {
   "name": "@dskripchenko/bpmn",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "BPMN 2.0 and DMN: a zero-dependency viewer that draws files to SVG (and DMN decision tables to HTML) without a DOM, an editing core with undo, and a Vue editor — reads and writes the XML of Camunda Modeler, bpmn.io and other tools without losing their extensions",
   "keywords": [
     "bpmn",
