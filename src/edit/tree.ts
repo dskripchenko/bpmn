@@ -179,3 +179,21 @@ export function* walk(element: XmlElement): Generator<XmlElement> {
 export function refText(element: XmlElement): string {
   return element.children.map((c) => (c.kind === 'text' || c.kind === 'cdata' ? c.value : '')).join('').trim()
 }
+
+/** A new element in any namespace, with the prefix the file uses for it (declared when missing). */
+export function makeIn(
+  doc: XmlDocument,
+  uri: string,
+  preferred: string,
+  local: string,
+  attrs: Record<string, string | number | undefined> = {},
+  children: XmlNode[] = [],
+): XmlElement {
+  const prefix = prefixFor(doc, uri, preferred)
+  const attributes: XmlAttribute[] = []
+  for (const [name, value] of Object.entries(attrs)) {
+    if (value === undefined) continue
+    attributes.push({ name, value: String(value), ns: '', local: name })
+  }
+  return { kind: 'element', name: prefix ? `${prefix}:${local}` : local, ns: uri, local, attributes, children, line: 0, column: 0 }
+}
