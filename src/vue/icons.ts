@@ -44,6 +44,10 @@ const PARTS: Record<string, Part[]> = {
     ['path', { d: 'M4 19 18 5', ...S }],
     ['path', { d: 'M11 5h7v7', ...F, fill: 'none', stroke: 'currentColor', 'stroke-width': 1.5 }],
   ],
+  decision: [['rect', { x: 3, y: 6, width: 18, height: 12, ...S }]],
+  inputData: [['rect', { x: 2, y: 7, width: 20, height: 10, rx: 5, ...S }]],
+  businessKnowledgeModel: [['path', { d: 'M6 6h15v9l-3 3H3V9Z', ...S }]],
+  knowledgeSource: [['path', { d: 'M4 5h16v12c-3-2-5 2-8 0s-5-2-8 0Z', ...S }]],
   lane: [
     ['rect', { x: 2, y: 4, width: 20, height: 16, ...S }],
     ['path', { d: 'M6 4v16M6 12h16', ...S }],

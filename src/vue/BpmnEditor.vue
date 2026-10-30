@@ -384,7 +384,8 @@ function place(type: ShapeType, at: Point, attach?: string): void {
   )
   if (!id) return
   selection.value = [id]
-  if (isActivity(type) || type === 'textAnnotation' || type === 'participant') nextTick(() => startEdit(id))
+  // After the click: its default action moves focus to the canvas.
+  if (isActivity(type) || type === 'textAnnotation' || type === 'participant') setTimeout(() => startEdit(id))
 }
 
 const ghost = computed(() => {
