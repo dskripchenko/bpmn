@@ -744,7 +744,7 @@ export class DmnDocument {
       const owner = this.current.elements.get(target)
       if (!owner || owner.type === 'textAnnotation') return
       const ext = this.extension(owner.xml)
-      const old = ext.findIndex((c) => c.local === 'edge' && hrefId(attr(c, 'source')) === source)
+      const old = ext.findIndex((c) => c.kind === 'element' && c.local === 'edge' && hrefId(attr(c, 'source')) === source)
       const node = makeIn(this.doc, DMN_BIODI, 'biodi', 'edge', { source }, points.map((p) => makeIn(this.doc, DMN_BIODI, 'biodi', 'waypoints', { x: r(p.x), y: r(p.y) })))
       if (old >= 0) ext.splice(old, 1, node)
       else ext.push(node)
