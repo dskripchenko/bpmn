@@ -145,7 +145,11 @@ function loopOf(element: XmlElement): LoopKind | undefined {
 
 /** Parses a BPMN 2.0 XML file into semantics and diagrams. */
 export function parse(xml: string, options: ParseOptions = {}): BpmnModel {
-  const document = parseXml(xml, options.limits)
+  return fromDocument(parseXml(xml, options.limits))
+}
+
+/** The model of an XML tree already read (or edited in place). */
+export function fromDocument(document: XmlDocument): BpmnModel {
   const root = document.root
   if (root.ns !== NS.bpmn || root.local !== 'definitions') {
     throw new BpmnError(

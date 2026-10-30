@@ -4,6 +4,11 @@
     "rootDir": "src",
     "types": []
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.spec.ts"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/vue/**"
+  ]
 }

@@ -95,3 +95,7 @@ conversations. Choreographies are drawn as plain boxes with their names.
 
 Each element is a `<g class="bpmn-element bpmn-type-userTask" data-element-id="Task_Check">`,
 so a page can find it, highlight it or attach a handler.
+
+## Editing
+
+To change diagrams, see the [editor](editor.md): a Vue component and a framework-free editing core.

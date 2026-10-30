@@ -4,7 +4,7 @@
 // Screenshots land in tests/browser/output, in the light and the dark theme.
 //
 //   pnpm build && node scripts/browser-check.mjs [filter]
-import { readFileSync, readdirSync, mkdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { chromium } from 'playwright'
 
@@ -82,7 +82,9 @@ const page = await browser.newPage({ viewport: { width: 1600, height: 1000 }, de
 await page.route('http://check.local/**', (route) => {
   const url = new URL(route.request().url())
   if (url.pathname === '/') return route.fulfill({ contentType: 'text/html', body: html })
-  if (url.pathname === '/index.mjs') return route.fulfill({ contentType: 'text/javascript', body: readFileSync(join(root, 'dist/index.mjs')) })
+  // The entry and the chunks it imports.
+  const file = join(root, 'dist', url.pathname.replace(/^\/+/, ''))
+  if (/^\/[\w.-]+\.(m?js)$/.test(url.pathname) && existsSync(file)) return route.fulfill({ contentType: 'text/javascript', body: readFileSync(file) })
   return route.fulfill({ status: 404 })
 })
 const errors = []

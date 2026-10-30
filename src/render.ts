@@ -24,6 +24,12 @@ export interface RenderOptions extends ParseOptions {
   title?: string
   /** Space around the drawing, in pixels. Default 10. */
   padding?: number
+  /**
+   * For an SVG placed inside another one (an editor's canvas): the root gets
+   * `x`/`y` at the drawing's own coordinates and no sizing style, so it lines
+   * up with the diagram's coordinates.
+   */
+  nested?: boolean
 }
 
 export interface RenderResult {
@@ -597,12 +603,15 @@ export function render(source: string | BpmnModel, options: RenderOptions = {}):
       xmlns: 'http://www.w3.org/2000/svg',
       id: rootId,
       class: 'bpmn',
+      x: options.nested ? x0 : undefined,
+      y: options.nested ? y0 : undefined,
+      overflow: options.nested ? 'visible' : undefined,
       width,
       height,
       viewBox: `${x0} ${y0} ${width} ${height}`,
       role: 'img',
       'aria-labelledby': titleId,
-      style: 'max-width:100%;height:auto',
+      style: options.nested ? undefined : 'max-width:100%;height:auto',
     },
     [
       el('title', { id: titleId }, [txt(title)]),
