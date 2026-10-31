@@ -55,6 +55,8 @@ export function autoLayout(model: DmnModel): DmnDiagram {
   for (const e of drg) layers[rank.get(e.id)!]!.push(e.id)
 
   const bounds = new Map<string, Bounds>()
+  // Each element's row: the band its layer occupies; detours run in the gaps between rows.
+  const rows = new Map<string, { top: number; bottom: number }>()
   const typeOf = (id: string) => model.elements.get(id)!.type
   // Place from the bottom up, each layer ordered by where its requirements sit.
   let y = top * (80 + GAP_Y)
@@ -72,6 +74,7 @@ export function autoLayout(model: DmnModel): DmnDiagram {
     for (const id of layer) {
       const size = dmnSize(typeOf(id))
       bounds.set(id, { x, y: y + (height - size.height) / 2, ...size })
+      rows.set(id, { top: y, bottom: y + height })
       x += size.width + GAP_X
     }
     y -= 80 + GAP_Y
@@ -94,7 +97,10 @@ export function autoLayout(model: DmnModel): DmnDiagram {
     if (!near) spare += size.height + 20
   }
   for (const b of bounds.values()) b.x = Math.round(b.x)
-  // Requirements that skip a layer go around what lies between, not through it.
+  // Requirements that skip a layer go around what lies between, not through it:
+  // up into the gap above the source's row, along that gap to a lane clear of
+  // every element in between, up the lane, along the gap below the target's
+  // row, into the target from below.
   const edges: DmnDiagram['edges'] = []
   for (const r of model.requirements) {
     const a = bounds.get(r.source)
@@ -102,23 +108,32 @@ export function autoLayout(model: DmnModel): DmnDiagram {
     if (!a || !b) continue
     const from = { x: a.x + a.width / 2, y: a.y }
     const to = { x: b.x + b.width / 2, y: b.y + b.height }
-    const blocking = [...bounds].filter(([id, o]) => id !== r.source && id !== r.target && crosses(from, to, o)).map(([, o]) => o)
-    if (blocking.length === 0) continue
-    const right = Math.max(...blocking.map((o) => o.x + o.width), a.x + a.width, b.x + b.width) + 30
-    const left = Math.min(...blocking.map((o) => o.x), a.x, b.x) - 30
-    const goRight = Math.abs(right - from.x) <= Math.abs(from.x - left)
-    const x = goRight ? right : left
-    // Out of the source's side, along the detour, into the target's side.
-    const ay = a.y + a.height / 2
-    const by = b.y + b.height / 2
+    if (![...bounds].some(([id, o]) => id !== r.source && id !== r.target && crosses(from, to, o))) continue
+    const low = (rows.get(r.source)?.top ?? a.y) - GAP_Y / 2
+    const high = (rows.get(r.target)?.bottom ?? b.y + b.height) + GAP_Y / 2
+    if (high >= low) continue
+    const between = [...bounds].filter(([id, o]) => id !== r.source && id !== r.target && o.y < low && o.y + o.height > high).map(([, o]) => o)
+    const clear = (x: number) => between.every((o) => x < o.x - 10 || x > o.x + o.width + 10)
+    const lanes = [from.x, to.x, ...between.flatMap((o) => [o.x - GAP_X / 2, o.x + o.width + GAP_X / 2])].filter(clear)
+    const lane = lanes.reduce((best, x) => (Math.abs(x - from.x) + Math.abs(x - to.x) < Math.abs(best - from.x) + Math.abs(best - to.x) ? x : best))
+    // Out of the source and into the target on the lane's side, apart from the requirements that go straight up.
+    // Kept off the corners (an input's rounded ends among them).
+    const side = (o: Bounds) => {
+      const inset = Math.min(o.width / 2, Math.max(15, o.height / 2))
+      return Math.min(Math.max(lane, o.x + inset), o.x + o.width - inset)
+    }
+    const exit = { x: side(a), y: from.y }
+    const entry = { x: side(b), y: to.y }
     edges.push({
       element: r.id,
-      waypoints: [
-        { x: goRight ? a.x + a.width : a.x, y: ay },
-        { x, y: ay },
-        { x, y: by },
-        { x: goRight ? b.x + b.width : b.x, y: by },
-      ],
+      waypoints: [exit, { x: exit.x, y: low }, { x: lane, y: low }, { x: lane, y: high }, { x: entry.x, y: high }, entry]
+        .filter((p, i, all) => {
+          // No repeated points, and no bend that goes straight on.
+          const prev = all[i - 1]
+          const next = all[i + 1]
+          if (!prev || !next) return true
+          return !((prev.x === p.x && p.x === next.x) || (prev.y === p.y && p.y === next.y))
+        }),
       colors: {},
     })
   }

@@ -1,4 +1,4 @@
-import { approximateMeasurer, BpmnError, hitPolicyCode, parseDmn, renderDecision, renderDmn } from '../src'
+import { approximateMeasurer, BpmnError, autoLayout, hitPolicyCode, parseDmn, renderDecision, renderDmn } from '../src'
 import { fixture } from './fixtures'
 
 const draw = (xml: string) => renderDmn(xml, { measureText: approximateMeasurer })
@@ -66,6 +66,36 @@ describe('renderDmn', () => {
     expect(y('Input_Customer')).toBeGreaterThan(y('Decision_Segment'))
     expect(y('Decision_Segment')).toBeGreaterThan(y('Decision_Discount'))
     expect(result.svg).toMatch(/data-element-id="Req_1"><path d="M[\d.]+,[\d.]+ L[\d.]+,[\d.]+ L[\d.]+,[\d.]+ L/)
+  })
+
+  it('routes a detour through the gaps between layers, never under another element', () => {
+    // Three inputs side by side; the middle one is needed above a knowledge source.
+    const xml = `<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" id="d" name="d" namespace="x">
+      <inputData id="payment" name="Payment"/><inputData id="score" name="Score"/><inputData id="history" name="History"/>
+      <knowledgeSource id="policy" name="Policy"><authorityRequirement id="ar_1"><requiredInput href="#history"/></authorityRequirement></knowledgeSource>
+      <decision id="risk" name="Risk"><informationRequirement id="ir_1"><requiredInput href="#score"/></informationRequirement><authorityRequirement id="ar_2"><requiredAuthority href="#policy"/></authorityRequirement></decision>
+      <decision id="verdict" name="Verdict"><informationRequirement id="ir_2"><requiredDecision href="#risk"/></informationRequirement><informationRequirement id="ir_3"><requiredInput href="#payment"/></informationRequirement></decision>
+    </definitions>`
+    const layout = autoLayout(parseDmn(xml))
+    const shapes = new Map(layout.shapes.map((s) => [s.element, s.bounds]))
+    const ends: Record<string, [string, string]> = { ir_1: ['score', 'risk'], ir_3: ['payment', 'verdict'] }
+    for (const [id, [source, target]] of Object.entries(ends)) {
+      const edge = layout.edges.find((e) => e.element === id)!
+      expect(edge).toBeDefined()
+      const points = edge.waypoints
+      // Orthogonal, out of the source's top, into the target's bottom.
+      points.slice(1).forEach((p, i) => expect(p.x === points[i]!.x || p.y === points[i]!.y).toBe(true))
+      expect(points[0]!.y).toBe(shapes.get(source)!.y)
+      expect(points[points.length - 1]!.y).toBe(shapes.get(target)!.y + shapes.get(target)!.height)
+      for (const [element, b] of shapes) {
+        if (element === source || element === target) continue
+        for (let i = 1; i < points.length; i++) {
+          const [p, q] = [points[i - 1]!, points[i]!]
+          const inside = Math.max(p.x, q.x) > b.x && Math.min(p.x, q.x) < b.x + b.width && Math.max(p.y, q.y) > b.y && Math.min(p.y, q.y) < b.y + b.height
+          expect(inside, `${id} crosses ${element}`).toBe(false)
+        }
+      }
+    }
   })
 
   it('draws every requirement kind', () => {
